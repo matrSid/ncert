@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ncert.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e0e;
+    --surface: #161616;
+    --surface2: #1e1e1e;
+    --border: #2a2a2a;
+    --accent: #c8f23a;
+    --accent2: #f23a6e;
+    --text: #e8e8e8;
+    --muted: #666;
+    --muted2: #444;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Instrument Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── ONBOARDING ── */
+  #onboarding {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+  .ob-box {
+    width: 100%;
+    max-width: 420px;
+  }
+  .ob-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.1rem;
+    color: var(--muted);
+    margin-bottom: 3rem;
+    letter-spacing: -0.02em;
+  }
+  .ob-logo span { color: var(--accent); }
+  .ob-q {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.6rem;
+    line-height: 1.3;
+  }
+  .ob-hint {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 1.1rem;
+    font-style: italic;
+  }
+  .ob-input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border .15s;
+    margin-bottom: 2rem;
+  }
+  .ob-input:focus { border-color: var(--accent); }
+  .ob-input::placeholder { color: var(--muted2); }
+
+  .ob-section { margin-bottom: 2.5rem; }
+
+  .ob-class-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.4rem;
+  }
+  .ob-class-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.65rem 0;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .15s;
+    text-align: center;
+  }
+  .ob-class-btn:hover { border-color: var(--accent); color: var(--text); }
+  .ob-class-btn.selected {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0e0e0e;
+  }
+
+  .ob-submit {
+    width: 100%;
+    background: var(--accent);
+    border: none;
+    border-radius: 6px;
+    padding: 0.85rem;
+    color: #0e0e0e;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity .15s;
+    margin-top: 0.5rem;
+  }
+  .ob-submit:hover { opacity: 0.85; }
+  .ob-submit:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .ob-err {
+    font-size: 0.78rem;
+    color: var(--accent2);
+    margin-top: -1.5rem;
+    margin-bottom: 1.5rem;
+    display: none;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ── MAIN APP ── */
+  #app { display: none; }
+
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(14,14,14,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 clamp(1rem, 4vw, 2rem);
+    height: 52px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .header-left {
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .app-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.95rem;
+    color: var(--muted);
+    cursor: pointer;
+    letter-spacing: -0.02em;
+  }
+  .app-logo span { color: var(--accent); }
+  .header-greeting {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    border-left: 1px solid var(--border);
+    padding-left: 1rem;
+  }
+  .header-greeting b { color: var(--text); }
+
+  .breadcrumb {
+    display: flex; align-items: center; gap: 0.4rem;
+    font-size: 0.75rem;
+    font-family: 'Space Mono', monospace;
+    color: var(--muted);
+  }
+  .breadcrumb .crumb { cursor: pointer; }
+  .breadcrumb .crumb:hover { color: var(--accent); }
+  .breadcrumb .sep { color: var(--muted2); }
+  .breadcrumb .active { color: var(--text); }
+
+  main { position: relative; }
+
+  /* ── VIEW: HOME ── */
+  #view-home {
+    padding: clamp(1.5rem, 4vw, 2.5rem) clamp(1rem, 4vw, 2rem);
+    max-width: 1100px; margin: 0 auto;
+  }
+  .home-header {
+    margin-bottom: 2rem;
+  }
+  .home-greeting {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(1rem, 3vw, 1.3rem);
+    color: var(--text);
+    margin-bottom: 0.3rem;
+  }
+  .home-sub {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+  }
+  .home-sub span { color: var(--accent); }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    margin-bottom: 0.9rem;
+  }
+  .class-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.5rem;
+  }
+  .class-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.2rem 1rem;
+    cursor: pointer;
+    transition: all .15s;
+    text-align: center;
+    position: relative;
+  }
+  .class-card:hover {
+    border-color: var(--accent);
+    background: var(--surface2);
+  }
+  .class-card.mine {
+    border-color: var(--accent);
+  }
+  .class-card.mine::after {
+    content: 'yours';
+    position: absolute;
+    top: 0.4rem; right: 0.5rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    color: var(--accent);
+    text-transform: lowercase;
+  }
+  .class-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+  .class-card.mine .class-num { color: var(--accent); }
+  .class-label {
+    font-size: 0.7rem;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ── VIEW: SUBJECTS ── */
+  #view-subjects, #view-chapters {
+    display: none;
+    padding: clamp(1.5rem, 4vw, 2.5rem) clamp(1rem, 4vw, 2rem);
+    max-width: 1100px; margin: 0 auto;
+  }
+  .view-head {
+    margin-bottom: 1.5rem;
+  }
+  .view-title {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(1rem, 3vw, 1.2rem);
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+  }
+  .view-meta {
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+  }
+
+  .btn-back {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    background: none; border: 1px solid var(--border);
+    border-radius: 5px; padding: 0.35rem 0.75rem;
+    color: var(--muted); font-size: 0.75rem;
+    cursor: pointer; font-family: 'Space Mono', monospace;
+    transition: all .15s; margin-bottom: 1.5rem;
+  }
+  .btn-back:hover { color: var(--text); border-color: var(--text); }
+
+  .search-wrap {
+    position: relative; max-width: 300px; margin-bottom: 1.2rem;
+  }
+  .search-input {
+    width: 100%;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 6px; padding: 0.55rem 0.9rem 0.55rem 2.2rem;
+    color: var(--text); font-family: 'Space Mono', monospace;
+    font-size: 0.8rem; outline: none; transition: border .15s;
+  }
+  .search-input:focus { border-color: var(--accent); }
+  .search-input::placeholder { color: var(--muted2); }
+  .search-icon {
+    position: absolute; left: 0.7rem; top: 50%; transform: translateY(-50%);
+    color: var(--muted); font-size: 0.8rem;
+  }
+
+  .subject-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.6rem;
+  }
+  .subject-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.1rem 1.1rem 1.4rem;
+    cursor: pointer;
+    transition: all .15s;
+    position: relative; overflow: hidden;
+  }
+  .subject-card:hover {
+    border-color: var(--sub-color, var(--accent));
+    background: var(--surface2);
+  }
+  .subject-card::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: var(--sub-color, var(--accent));
+    opacity: 0; transition: opacity .15s;
+  }
+  .subject-card:hover::before { opacity: 1; }
+  .subject-icon { font-size: 1.5rem; margin-bottom: 0.6rem; }
+  .subject-name {
+    font-weight: 600; font-size: 0.85rem; margin-bottom: 0.2rem;
+    color: var(--text);
+    font-family: 'Instrument Sans', sans-serif;
+  }
+  .subject-meta { font-size: 0.72rem; color: var(--muted); font-family: 'Space Mono', monospace; }
+
+  /* ── VIEW: CHAPTERS ── */
+  .book-badge {
+    display: inline-block;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px; padding: 0.2rem 0.6rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem; color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .prelim-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px; padding: 0.9rem 1.1rem;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem; flex-wrap: wrap; margin-bottom: 1.2rem;
+  }
+  .prelim-text p {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem; color: var(--muted);
+  }
+  .prelim-text span {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem; color: var(--text); font-weight: 700;
+    display: block; margin-bottom: 0.15rem;
+  }
+  .btn-primary {
+    background: var(--surface2); color: var(--text);
+    border: 1px solid var(--border); border-radius: 5px;
+    padding: 0.5rem 1rem;
+    font-weight: 600; font-size: 0.78rem;
+    cursor: pointer; font-family: 'Space Mono', monospace;
+    transition: all .15s; white-space: nowrap;
+  }
+  .btn-primary:hover { border-color: var(--accent); color: var(--accent); }
+
+  .chapter-list { display: flex; flex-direction: column; gap: 0.35rem; }
+  .chapter-row {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 7px; padding: 0.7rem 1rem;
+    display: flex; align-items: center; gap: 0.9rem;
+    transition: all .15s;
+  }
+  .chapter-row:hover {
+    border-color: var(--sub-color, var(--accent));
+    background: var(--surface2);
+  }
+  .ch-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    min-width: 1.8rem;
+  }
+  .ch-name {
+    flex: 1;
+    font-size: 0.85rem;
+    color: var(--text);
+    font-family: 'Instrument Sans', sans-serif;
+  }
+  .ch-actions { display: flex; gap: 0.35rem; flex-shrink: 0; }
+  .btn-pdf, .btn-dl {
+    border: 1px solid var(--border); border-radius: 5px;
+    padding: 0.35rem 0.7rem;
+    font-size: 0.72rem; font-weight: 600;
+    cursor: pointer; transition: all .15s;
+    font-family: 'Space Mono', monospace;
+    background: none;
+    color: var(--muted);
+  }
+  .btn-pdf:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-dl:hover { border-color: var(--text); color: var(--text); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-in { animation: fadeIn 0.25s ease both; }
+  .stagger > * { animation: fadeIn 0.25s ease both; }
+  .stagger > *:nth-child(1) { animation-delay: 0.03s; }
+  .stagger > *:nth-child(2) { animation-delay: 0.06s; }
+  .stagger > *:nth-child(3) { animation-delay: 0.09s; }
+  .stagger > *:nth-child(4) { animation-delay: 0.12s; }
+  .stagger > *:nth-child(5) { animation-delay: 0.15s; }
+  .stagger > *:nth-child(6) { animation-delay: 0.18s; }
+  .stagger > *:nth-child(7) { animation-delay: 0.21s; }
+  .stagger > *:nth-child(8) { animation-delay: 0.24s; }
+  .stagger > *:nth-child(n+9) { animation-delay: 0.27s; }
+
+  /* ── SETTINGS POPOVER ── */
+  .settings-btn {
+    background: none; border: 1px solid var(--border);
+    border-radius: 5px; padding: 0.3rem 0.6rem;
+    color: var(--muted); font-family: 'Space Mono', monospace;
+    font-size: 0.7rem; cursor: pointer; transition: all .15s;
+    position: relative;
+  }
+  .settings-btn:hover { color: var(--text); border-color: var(--text); }
+
+  .settings-panel {
+    position: absolute; top: 52px; right: 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px; padding: 1rem;
+    min-width: 220px; z-index: 200;
+    display: none;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,.5);
+  }
+  .settings-panel.open { display: block; }
+  .settings-panel label { color: var(--muted); display: block; margin-bottom: 0.3rem; }
+  .settings-panel input {
+    width: 100%;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 5px; padding: 0.45rem 0.6rem;
+    color: var(--text); font-family: 'Space Mono', monospace;
+    font-size: 0.78rem; outline: none; margin-bottom: 0.8rem;
+  }
+  .settings-panel input:focus { border-color: var(--accent); }
+  .settings-class-row {
+    display: flex; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 0.8rem;
+  }
+  .settings-cls-btn {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 4px; padding: 0.3rem 0.5rem;
+    color: var(--muted); font-family: 'Space Mono', monospace;
+    font-size: 0.72rem; font-weight: 700; cursor: pointer; transition: all .12s;
+  }
+  .settings-cls-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .settings-cls-btn.selected { background: var(--accent); border-color: var(--accent); color: #0e0e0e; }
+  .btn-save-settings {
+    width: 100%; background: var(--accent); border: none;
+    border-radius: 5px; padding: 0.5rem;
+    color: #0e0e0e; font-family: 'Space Mono', monospace;
+    font-size: 0.75rem; font-weight: 700; cursor: pointer;
+    transition: opacity .15s;
+  }
+  .btn-save-settings:hover { opacity: 0.85; }
+
+  @media (max-width: 600px) {
+    .class-grid { grid-template-columns: repeat(4, 1fr); }
+    .ob-class-grid { grid-template-columns: repeat(4, 1fr); }
+    .chapter-row { flex-wrap: wrap; }
+    .ch-actions { width: 100%; }
+    .btn-pdf, .btn-dl { flex: 1; justify-content: center; }
+    .header-greeting { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── ONBOARDING ── -->
+<div id="onboarding">
+  <div class="ob-box">
+    <div class="ob-logo">ncert<span>.</span></div>
+
+    <div class="ob-section">
+      <div class="ob-q">what do i call you?</div>
+      <div class="ob-hint">your name, nickname, whatever</div>
+      <input type="text" class="ob-input" id="ob-name" placeholder="e.g. sid, or sm else idk" maxlength="30" autocomplete="off">
+    </div>
+
+    <div class="ob-section">
+      <div class="ob-q">which class are you in?</div>
+      <div class="ob-hint">you can always change this later</div>
+      <div class="ob-class-grid" id="ob-class-grid"></div>
+    </div>
+
+    <div class="ob-err" id="ob-err">fill in your name and pick a class first</div>
+    <button class="ob-submit" id="ob-submit" onclick="submitOnboarding()">let's go →</button>
+  </div>
+</div>
+
+<!-- ── MAIN APP ── -->
+<div id="app">
+  <header>
+    <div class="header-left">
+      <div class="app-logo" onclick="goHome()">ncert<span>.</span></div>
+      <div class="header-greeting">hey, <b id="header-name"></b></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:0.75rem;">
+      <nav class="breadcrumb" id="breadcrumb"></nav>
+      <div style="position:relative;">
+        <button class="settings-btn" id="settings-toggle" onclick="toggleSettings()">⚙ settings</button>
+        <div class="settings-panel" id="settings-panel">
+          <label>your name</label>
+          <input type="text" id="s-name" maxlength="30" autocomplete="off">
+          <label>your class</label>
+          <div class="settings-class-row" id="s-class-row"></div>
+          <button class="btn-save-settings" onclick="saveSettings()">save</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HOME -->
+    <div id="view-home">
+      <div class="home-header">
+        <div class="home-greeting" id="home-greeting"></div>
+        <div class="home-sub">pick a class — or jump straight to <span id="home-class-link" style="cursor:pointer;text-decoration:underline;text-underline-offset:3px;" onclick=""></span></div>
+      </div>
+      <div class="section-label">all classes</div>
+      <div class="class-grid stagger" id="class-grid"></div>
+    </div>
+
+    <!-- SUBJECTS -->
+    <div id="view-subjects">
+      <button class="btn-back" id="back-from-subjects">← classes</button>
+      <div class="view-head">
+        <div class="view-title" id="subjects-title"></div>
+        <div class="view-meta" id="subjects-meta"></div>
+      </div>
+      <div class="search-wrap">
+        <span class="search-icon">⌕</span>
+        <input type="text" class="search-input" id="subject-search" placeholder="search subjects...">
+      </div>
+      <div class="subject-grid stagger" id="subject-grid"></div>
+    </div>
+
+    <!-- CHAPTERS -->
+    <div id="view-chapters">
+      <button class="btn-back" id="back-from-chapters">← subjects</button>
+      <div class="view-head">
+        <span class="book-badge" id="chapters-badge"></span>
+        <div class="view-title" id="chapters-title"></div>
+        <div class="view-meta" id="chapters-meta"></div>
+      </div>
+      <div class="prelim-card">
+        <div class="prelim-text">
+          <span>full book</span>
+          <p>all chapters in one pdf</p>
+        </div>
+        <button class="btn-primary" id="btn-full-book">open →</button>
+      </div>
+      <div class="section-label">chapters</div>
+      <div class="search-wrap">
+        <span class="search-icon">⌕</span>
+        <input type="text" class="search-input" id="chapter-search" placeholder="search chapters...">
+      </div>
+      <div class="chapter-list stagger" id="chapter-grid"></div>
+    </div>
+  </main>
+</div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────
+const NCERT_DATA = {
+  6: {
+    label: 'Class VI', stream: 'Middle School',
+    subjects: [
+      { name:'Mathematics', subtitle:'Math-Magic', icon:'🔢', color:'#58a6ff', code:'femh1', chapters:['Knowing Our Numbers','Whole Numbers','Playing with Numbers','Basic Geometrical Ideas','Understanding Elementary Shapes','Integers','Fractions','Decimals','Data Handling','Mensuration','Algebra','Ratio and Proportion','Symmetry','Practical Geometry'] },
+      { name:'Science', subtitle:'Science', icon:'🔬', color:'#3fb950', code:'fesc1', chapters:['Food: Where Does It Come From?','Components of Food','Fibre to Fabric','Sorting Materials into Groups','Separation of Substances','Changes Around Us','Getting to Know Plants','Body Movements','The Living Organisms and Their Surroundings','Motion and Measurement of Distances','Light, Shadows and Reflections','Electricity and Circuits','Fun with Magnets','Water','Air Around Us','Garbage In, Garbage Out'] },
+      { name:'History', subtitle:'Our Pasts – I', icon:'📜', color:'#f5a623', code:'fehs1', chapters:['What, Where, How and When?','On The Trail of the Earliest People','From Gathering to Growing Food','In the Earliest Cities','What Books and Burials Tell Us','Kingdoms, Kings and an Early Republic','New Questions and Ideas','Ashoka, The Emperor Who Gave Up War','Vital Villages, Thriving Towns','Traders, Kings and Pilgrims','New Empires and Kingdoms','Buildings, Paintings and Books'] },
+      { name:'Geography', subtitle:'The Earth – Our Habitat', icon:'🌍', color:'#39d0d8', code:'fegg1', chapters:['The Earth in the Solar System','Globe: Latitudes and Longitudes','Motions of the Earth','Maps','Major Domains of the Earth','Major Landforms of the Earth','Our Country – India','India: Climate, Vegetation and Wildlife'] },
+      { name:'Civics', subtitle:'Social & Political Life – I', icon:'⚖️', color:'#bc8cff', code:'feps1', chapters:['Understanding Diversity','Diversity and Discrimination','What is Government?','Key Elements of a Democratic Government','Panchayati Raj','Rural Administration','Urban Administration','Rural Livelihoods','Urban Livelihoods'] },
+      { name:'English', subtitle:'Honeysuckle', icon:'📖', color:'#ff6b9d', code:'feeh1', chapters:["Who Did Patrick's Homework?","How the Dog Found Himself a New Master!","Taro's Reward","An Indian – American Woman in Space","A Different Kind of School","Who I Am","Fair Play","A Game of Chance","Desert Animals","The Banyan Tree"] },
+      { name:'English Supplementary', subtitle:'A Pact with the Sun', icon:'📗', color:'#ff6b9d', code:'fees1', chapters:['A Tale of Two Birds','The Friendly Mongoose',"The Shepherd's Treasure","The Old-Clock Shop","Tansen","The Monkey and the Crocodile","The Wonder Called Sleep","A Pact with the Sun","What Happened to the Reptiles","A Strange Wrestling Match"] },
+      { name:'Hindi – Vasant', subtitle:'वसंत भाग 1', icon:'🪔', color:'#ff7b1f', code:'fehi1', chapters:['वह चिड़िया जो','बचपन','नादान दोस्त','चाँद से थोड़ी सी गप्पें','अक्षरों का महत्व','पार नज़र के','साथी हाथ बढ़ाना','ऐसे–ऐसे','टिकट-अलबम','झाँसी की रानी','जो देखकर भी नहीं देखते','संसार पुस्तक है','मैं सबसे छोटी होऊँ','लोकगीत','नौकर','वन के मार्ग में','साँस–साँस में बाँस'] },
+      { name:'Sanskrit', subtitle:'रुचिरा भाग 1', icon:'🕉️', color:'#f5a623', code:'fesa1', chapters:['शब्द परिचयः 1','शब्द परिचयः 2','शब्द परिचयः 3','विद्यालयः','वृक्षाः','समुद्रतटः','बकस्य प्रतिकारः','सूक्तिस्तबकः','क्रीडास्पर्धा','कृषिकाः कर्मवीराः','पुष्पोत्सवः','दशमः त्वम् असि','विमानयानं रचयाम','अहह आः च','मातुलचन्द्र'] }
+    ]
+  },
+  7: {
+    label: 'Class VII', stream: 'Middle School',
+    subjects: [
+      { name:'Mathematics', subtitle:'Math-Magic 2', icon:'🔢', color:'#58a6ff', code:'gemh1', chapters:['Integers','Fractions and Decimals','Data Handling','Simple Equations','Lines and Angles','The Triangle and Its Properties','Congruence of Triangles','Comparing Quantities','Rational Numbers','Practical Geometry','Perimeter and Area','Algebraic Expressions','Exponents and Powers','Symmetry','Visualising Solid Shapes'] },
+      { name:'Science', subtitle:'Science', icon:'🔬', color:'#3fb950', code:'gesc1', chapters:['Nutrition in Plants','Nutrition in Animals','Heat','Acids, Bases and Salts','Physical and Chemical Changes','Respiration in Organisms','Transportation in Animals and Plants','Reproduction in Plants','Motion and Time','Electric Current and its Effects','Light','Forests: Our Lifeline','Wastewater Story'] },
+      { name:'History', subtitle:'Our Pasts – II', icon:'📜', color:'#f5a623', code:'gehs1', chapters:['Tracing Changes Through a Thousand Years','New Kings and Kingdoms','The Delhi Sultans','The Mughal Empire','Rulers and Buildings','Towns, Traders and Craftspersons','Tribes, Nomads and Settled Communities','Devotional Paths to the Divine','The Making of Regional Cultures','Eighteenth-Century Political Formations'] },
+      { name:'Geography', subtitle:'Our Environment', icon:'🌍', color:'#39d0d8', code:'gegg1', chapters:['Environment','Inside Our Earth','Our Changing Earth','Air','Water','Natural Vegetation and Wildlife','Human Environment–Settlement, Transport and Communication','Human-Environment Interactions: The Tropical and the Subtropical Region','Life in the Temperate Grasslands','Life in the Deserts'] },
+      { name:'Civics', subtitle:'Social & Political Life – II', icon:'⚖️', color:'#bc8cff', code:'geps1', chapters:['On Equality','Role of the Government in Health','How the State Government Works','Growing Up as Boys and Girls','Women Change the World','Understanding Media','Markets Around Us','A Shirt in the Market','Struggles for Equality'] },
+      { name:'English', subtitle:'Honeycomb', icon:'📖', color:'#ff6b9d', code:'geeh1', chapters:['Three Questions','A Gift of Chappals','Gopal and the Hilsa Fish','The Ashes That Made Trees Bloom','Quality','Expert Detectives','The Invention of Vita-Wonk','Fire: Friend and Foe','A Bicycle in Good Repair','The Story of Cricket'] },
+      { name:'English Supplementary', subtitle:'An Alien Hand', icon:'📗', color:'#ff6b9d', code:'geas1', chapters:['The Tiny Teacher','Bringing Up Kari','The Desert','The Cop and the Anthem','Golu Grows a Nose','I Want Something in a Cage','Chandni','The Bear Story','A Tiger in the House','An Alien Hand'] },
+      { name:'Hindi – Vasant', subtitle:'वसंत भाग 2', icon:'🪔', color:'#ff7b1f', code:'gehi1', chapters:['हम पंछी उन्मुक्त गगन के','दादी माँ','हिमालय की बेटियाँ','कठपुतली','मिठाईवाला','रक्त और हमारा शरीर','पापा खो गए','शाम–एक किसान','चिड़िया की बच्ची','अपूर्व अनुभव','रहीम के दोहे','कंचा','एक तिनका','खानपान की बदलती तस्वीर','नीलकंठ','भोर और बरखा','वीर कुंवर सिंह','संघर्ष के कारण मैं तुनकमिजाज हो गया: धनराज','आश्रम का अनुमानित व्यय','विप्लव-गायन'] },
+      { name:'Sanskrit', subtitle:'रुचिरा भाग 2', icon:'🕉️', color:'#f5a623', code:'gesa1', chapters:['सुभाषितानि','दुर्बुद्धिः विनश्यति','स्वावलम्बनम्','हास्यबालकविसम्मेलनम्','पण्डिता रमाबाई','सदाचारः','संकल्पः सिद्धिदायकः','त्रिपदा गायत्री','अहमपि विद्यालयं गमिष्यामि','विश्वबन्धुत्वम्','समवायो हि दुर्जयः','विदेशिनी','अमृतं संस्कृतम्'] }
+    ]
+  },
+  8: {
+    label: 'Class VIII', stream: 'Middle School',
+    subjects: [
+      { name:'Mathematics', subtitle:'Math-Magic 3', icon:'🔢', color:'#58a6ff', code:'hemh1', chapters:['Rational Numbers','Linear Equations in One Variable','Understanding Quadrilaterals','Practical Geometry','Data Handling','Squares and Square Roots','Cubes and Cube Roots','Comparing Quantities','Algebraic Expressions and Identities','Visualising Solid Shapes','Mensuration','Exponents and Powers','Direct and Inverse Proportions','Factorisation','Introduction to Graphs','Playing with Numbers'] },
+      { name:'Science', subtitle:'Science', icon:'🔬', color:'#3fb950', code:'hesc1', chapters:['Crop Production and Management','Microorganisms: Friend and Foe','Synthetic Fibres and Plastics','Materials: Metals and Non-Metals','Coal and Petroleum','Combustion and Flame','Conservation of Plants and Animals','Reproduction in Animals','Reaching the Age of Adolescence','Force and Pressure','Friction','Sound','Chemical Effects of Electric Current','Some Natural Phenomena','Light','Stars and The Solar System','Pollution of Air and Water'] },
+      { name:'History', subtitle:'Our Pasts – III', icon:'📜', color:'#f5a623', code:'hehs1', chapters:['How, When and Where','From Trade to Territory','Ruling the Countryside','Tribals, Dikus and the Vision of a Golden Age','When People Rebel','Weavers, Iron Smelters and Factory Owners','Civilising the "Native", Educating the Nation','Women, Caste and Reform','The Making of the National Movement: 1870s–1947','India After Independence'] },
+      { name:'Geography', subtitle:'Resources and Development', icon:'🌍', color:'#39d0d8', code:'hegg1', chapters:['Resources','Land, Soil, Water, Natural Vegetation and Wildlife Resources','Mineral and Power Resources','Agriculture','Industries','Human Resources'] },
+      { name:'Civics', subtitle:'Social & Political Life – III', icon:'⚖️', color:'#bc8cff', code:'heps1', chapters:['The Indian Constitution','Understanding Secularism','Parliament and the Making of Laws','Judiciary','Understanding Marginalisation','Confronting Marginalisation','Public Facilities','Law and Social Justice'] },
+      { name:'English', subtitle:'Honeydew', icon:'📖', color:'#ff6b9d', code:'heeh1', chapters:['The Best Christmas Present in the World','The Tsunami','Glimpses of the Past',"Bepin Choudhury's Lapse of Memory",'The Summit Within',"This is Jody's Fawn",'A Visit to Cambridge','A Short Monsoon Diary','The Great Stone Face – I','The Great Stone Face – II'] },
+      { name:'English Supplementary', subtitle:'It So Happened', icon:'📗', color:'#ff6b9d', code:'heis1', chapters:['How the Camel Got His Hump','Children at Work','The Selfish Giant','The Treasure Within','Princess September','The Fight','The Open Window','Jalebis','The Comet – I','The Comet – II'] },
+      { name:'Hindi – Vasant', subtitle:'वसंत भाग 3', icon:'🪔', color:'#ff7b1f', code:'hehi1', chapters:['ध्वनि','लाख की चूड़ियाँ','बस की यात्रा','दीवानों की हस्ती','चिट्ठियों की अनूठी दुनिया','भगवान के डाकिए','क्या निराश हुआ जाए','यह सबसे कठिन समय नहीं','कबीर की साखियाँ','कामचोर','जब सिनेमा ने बोलना सीखा','सुदामा चरित','जहाँ पहिया है','अकबरी लोटा','सूरदास के पद','पानी की कहानी','बाज और साँप','टोपी'] },
+      { name:'Sanskrit', subtitle:'रुचिरा भाग 3', icon:'🕉️', color:'#f5a623', code:'hesa1', chapters:['सुभाषितानि','बिलस्य वाणी न कदापि मे श्रुता','डिजीभारतम्','सदैव पुरतो निधेहि चरणम्','कण्टकेनैव कण्टकम्','गृहं शून्यं सुतां विना','भारतजनताऽहम्','संसारसागरस्य नायकाः','सप्तभगिन्यः','नीतिनवनीतम्','सावित्री बाई फुले','कः रक्षति कः रक्षितः','क्षितौ राजते भारतस्वर्णभूमिः','आर्यभटः','प्रहेलिका'] }
+    ]
+  },
+  9: {
+    label: 'Class IX', stream: 'Secondary',
+    subjects: [
+      { name:'Mathematics', subtitle:'Mathematics', icon:'🔢', color:'#58a6ff', code:'iemh1', chapters:['Number Systems','Polynomials','Coordinate Geometry','Linear Equations in Two Variables',"Introduction to Euclid's Geometry",'Lines and Angles','Triangles','Quadrilaterals','Circles',"Heron's Formula",'Surface Areas and Volumes','Statistics'] },
+      { name:'Science', subtitle:'Science', icon:'🔬', color:'#3fb950', code:'iesc1', chapters:['Matter in Our Surroundings','Is Matter Around Us Pure','Atoms and Molecules','Structure of the Atom','The Fundamental Unit of Life','Tissues','Motion','Force and Laws of Motion','Gravitation','Work and Energy','Sound','Improvement in Food Resources'] },
+      { name:'History', subtitle:'India & the Contemporary World – I', icon:'📜', color:'#f5a623', code:'iehs1', chapters:['The French Revolution','Socialism in Europe and the Russian Revolution','Nazism and the Rise of Hitler','Forest Society and Colonialism','Pastoralists in the Modern World'] },
+      { name:'Geography', subtitle:'Contemporary India – I', icon:'🌍', color:'#39d0d8', code:'iegg1', chapters:['India – Size and Location','Physical Features of India','Drainage','Climate','Natural Vegetation and Wildlife','Population'] },
+      { name:'Political Science', subtitle:'Democratic Politics – I', icon:'⚖️', color:'#bc8cff', code:'ieps1', chapters:['What is Democracy? Why Democracy?','Constitutional Design','Electoral Politics','Working of Institutions','Democratic Rights'] },
+      { name:'Economics', subtitle:'Economics', icon:'💰', color:'#3fb950', code:'iees1', chapters:['The Story of Village Palampur','People as Resource','Poverty as a Challenge','Food Security in India'] },
+      { name:'English – Beehive', subtitle:'Beehive', icon:'📖', color:'#ff6b9d', code:'ieeh1', chapters:['The Fun They Had','The Sound of Music','The Little Girl','A Truly Beautiful Mind','The Snake and the Mirror','My Childhood','Packing','Reach for the Top','The Bond of Love','Kathmandu','If I Were You'] },
+      { name:'English – Moments', subtitle:'Moments (Supplementary)', icon:'📗', color:'#ff6b9d', code:'iems1', chapters:['The Lost Child','The Adventures of Toto','Iswaran the Storyteller','In the Kingdom of Fools','The Happy Prince','Weathering the Storm in Ersama','The Last Leaf','A House is Not a Home','The Accidental Tourist','The Beggar'] },
+      { name:'Hindi A – Kshitij', subtitle:'क्षितिज भाग 1', icon:'🪔', color:'#ff7b1f', code:'iehk1', chapters:['दो बैलों की कथा','ल्हासा की ओर','उपभोक्तावाद की संस्कृति','साँवले सपनों की याद','नाना साहब की पुत्री देवी मैना को भस्म कर दिया गया','प्रेमचंद के फटे जूते','मेरे बचपन के दिन','एक कुत्ता और एक मैना','कबीर की साखियाँ','ललद्यद','रसखान के सवैये','माखनलाल चतुर्वेदी','सुमित्रानंदन पंत','केदारनाथ अग्रवाल','सर्वेश्वर दयाल सक्सेना','चंद्रकांत देवताले','राजेश जोशी'] },
+      { name:'Hindi B – Sparsh', subtitle:'स्पर्श भाग 1', icon:'🪔', color:'#ff7b1f', code:'iehp1', chapters:['धूल','दुःख का अधिकार','एवरेस्ट: मेरी शिखर यात्रा','तुम कब जाओगे, अतिथि','वैज्ञानिक चेतना के वाहक चन्द्र शेखर वेंकट रामन','किस तरह आखिरकार मैं हिंदी में आया','नया रास्ता','शक्ति और क्षमा','कबीर की साखियाँ','वाख','सवैये','तोप','आदमी नामा','एक फूल की चाह','गीत—अगीत','अग्नि पथ','नए इलाके में','खुशबू रचते हैं हाथ'] },
+      { name:'Sanskrit', subtitle:'शेमुषी भाग 1', icon:'🕉️', color:'#f5a623', code:'iesa1', chapters:['भारतीवसन्तगीतिः','स्वर्णकाकः','गोदोहनम्','कल्पतरूः','सूक्तिमौक्तिकम्','भ्रान्तो बालः','प्रत्यभिज्ञानम्','लौहतुला','सिकतासेतुः','जटायोः शौर्यम्','पर्यावरणम्','वाडमनः प्राणस्वरूपम्'] }
+    ]
+  },
+  10: {
+    label: 'Class X', stream: 'Secondary (Board)',
+    subjects: [
+      { name:'Mathematics', subtitle:'Mathematics', icon:'🔢', color:'#58a6ff', code:'jemh1', chapters:['Real Numbers','Polynomials','Pair of Linear Equations in Two Variables','Quadratic Equations','Arithmetic Progressions','Triangles','Coordinate Geometry','Introduction to Trigonometry','Some Applications of Trigonometry','Circles','Areas Related to Circles','Surface Areas and Volumes','Statistics','Probability'] },
+      { name:'Science', subtitle:'Science', icon:'🔬', color:'#3fb950', code:'jesc1', fullCode:'jesc1ps', chapters:['Chemical Reactions and Equations','Acids, Bases and Salts','Metals and Non-metals','Carbon and its Compounds','Life Processes','Control and Coordination','How do Organisms Reproduce?','Heredity','Light – Reflection and Refraction','The Human Eye and the Colourful World','Electricity','Magnetic Effects of Electric Current','Our Environment'] },
+      { name:'History', subtitle:'India & Contemporary World – II', icon:'📜', color:'#f5a623', code:'jehs1', chapters:['The Rise of Nationalism in Europe','Nationalism in India','The Making of a Global World','The Age of Industrialisation','Print Culture and the Modern World'] },
+      { name:'Geography', subtitle:'Contemporary India – II', icon:'🌍', color:'#39d0d8', code:'jegg1', chapters:['Resources and Development','Forest and Wildlife Resources','Water Resources','Agriculture','Minerals and Energy Resources','Manufacturing Industries','Lifelines of National Economy'] },
+      { name:'Political Science', subtitle:'Democratic Politics – II', icon:'⚖️', color:'#bc8cff', code:'jeps1', chapters:['Power Sharing','Federalism','Gender, Religion and Caste','Political Parties','Outcomes of Democracy'] },
+      { name:'Economics', subtitle:'Understanding Economic Development', icon:'💰', color:'#3fb950', code:'jees1', chapters:['Development','Sectors of the Indian Economy','Money and Credit','Globalisation and the Indian Economy','Consumer Rights'] },
+      { name:'English – First Flight', subtitle:'First Flight', icon:'📖', color:'#ff6b9d', code:'jeeh1', chapters:['A Letter to God','Nelson Mandela: Long Walk to Freedom','Two Stories about Flying','From the Diary of Anne Frank','The Hundred Dresses – I','The Hundred Dresses – II','Glimpses of India','Mijbil the Otter','Madam Rides the Bus','The Sermon at Benares','The Proposal'] },
+      { name:'English – Footprints', subtitle:'Footprints Without Feet (Suppl.)', icon:'📗', color:'#ff6b9d', code:'jefs1', chapters:["A Triumph of Surgery","The Thief's Story","The Midnight Visitor","A Question of Trust","Footprints without Feet","The Making of a Scientist","The Necklace","The Hack Driver","Bholi","The Book That Saved the Earth"] },
+      { name:'Hindi A – Kshitij', subtitle:'क्षितिज भाग 2', icon:'🪔', color:'#ff7b1f', code:'jehk1', chapters:['सूरदास','तुलसीदास','देव','जयशंकर प्रसाद','सूर्यकांत त्रिपाठी निराला','नागार्जुन','गिरिजाकुमार माथुर','ऋतुराज','मंगलेश डबराल','स्वयं प्रकाश','रामवृक्ष बेनीपुरी','यशपाल','सर्वेश्वर दयाल सक्सेना','मन्नू भंडारी','महावीर प्रसाद द्विवेदी','यतींद्र मिश्र','भदंत आनंद कौसल्यायन'] },
+      { name:'Hindi A – Kritika', subtitle:'कृतिका भाग 2', icon:'🪔', color:'#ff7b1f', code:'jehc1', chapters:['माता का आँचल','जॉर्ज पंचम की नाक','साना-साना हाथ जोड़ि','एही ठैयाँ झुलनी हेरानी हो रामा!','मैं क्यों लिखता हूँ?'] },
+      { name:'Hindi B – Sparsh', subtitle:'स्पर्श भाग 2', icon:'🪔', color:'#ff7b1f', code:'jehp1', chapters:['बड़े भाई साहब','डायरी का एक पन्ना','तताँरा-वामीरो कथा','तीसरी कसम के शिल्पकार शैलेंद्र','गिरगिट','अब कहाँ दूसरे के दुख से दुखी होने वाले','पतझर में टूटी पत्तियाँ','कारतूस','मीरा के पद','बिहारी के दोहे','महादेवी वर्मा','कबीर की साखियाँ','मनुष्यता','पर्वत प्रदेश में पावस','मधुर मधुर मेरे दीपक जल','तोप','कर चले हम फ़िदा','आत्मत्राण'] },
+      { name:'Sanskrit', subtitle:'शेमुषी भाग 2', icon:'🕉️', color:'#f5a623', code:'jesa1', chapters:['शुचिपर्यावरणम्','बुद्धिर्बलवती सदा','व्यायामः सर्वदा पथ्यः','शिशुलालनम्','जननी तुल्यवत्सला','सुभाषितानि','सौहार्दं प्रकृतेः शोभा','विचित्रः साक्षी','सूक्तयः','भूकम्पविभीषिका','प्राणेभ्योऽपि प्रियः सुह्रद्','अनयोः प्रश्नोत्तराणि'] }
+    ]
+  },
+  11: {
+    label: 'Class XI', stream: 'Senior Secondary',
+    subjects: [
+      { name:'Physics – I', subtitle:'Part 1', icon:'⚡', color:'#58a6ff', code:'keph1', chapters:['Physical World','Units and Measurements','Motion in a Straight Line','Motion in a Plane','Laws of Motion','Work, Energy and Power','Systems of Particles and Rotational Motion','Gravitation'] },
+      { name:'Physics – II', subtitle:'Part 2', icon:'🌊', color:'#58a6ff', code:'keph2', chapters:['Mechanical Properties of Solids','Mechanical Properties of Fluids','Thermal Properties of Matter','Thermodynamics','Kinetic Theory','Oscillations','Waves'] },
+      { name:'Chemistry – I', subtitle:'Part 1', icon:'⚗️', color:'#3fb950', code:'kech1', chapters:['Some Basic Concepts of Chemistry','Structure of the Atom','Classification of Elements and Periodicity in Properties','Chemical Bonding and Molecular Structure','Thermodynamics','Equilibrium','Redox Reactions'] },
+      { name:'Chemistry – II', subtitle:'Part 2', icon:'🧪', color:'#3fb950', code:'kech2', chapters:['Hydrocarbons','The s-Block Elements','The p-Block Elements','Organic Chemistry – Some Basic Principles and Techniques','Environmental Chemistry'] },
+      { name:'Biology', subtitle:'Biology', icon:'🧬', color:'#39d0d8', code:'kebo1', chapters:['The Living World','Biological Classification','Plant Kingdom','Animal Kingdom','Morphology of Flowering Plants','Anatomy of Flowering Plants','Structural Organisation in Animals','Cell: The Unit of Life','Biomolecules','Cell Cycle and Cell Division','Photosynthesis in Higher Plants','Respiration in Plants','Plant Growth and Development','Breathing and Exchange of Gases','Body Fluids and Circulation','Excretory Products and their Elimination','Locomotion and Movement','Neural Control and Coordination','Chemical Coordination and Integration'] },
+      { name:'Mathematics', subtitle:'Mathematics', icon:'🔢', color:'#bc8cff', code:'kemh1', chapters:['Sets','Relations and Functions','Trigonometric Functions','Complex Numbers and Quadratic Equations','Linear Inequalities','Permutations and Combinations','Binomial Theorem','Sequences and Series','Straight Lines','Conic Sections','Introduction to Three Dimensional Geometry','Limits and Derivatives','Statistics','Probability'] },
+      { name:'English – Hornbill', subtitle:'Hornbill', icon:'📖', color:'#ff6b9d', code:'keeh1', chapters:["The Portrait of a Lady","We're Not Afraid to Die…","Discovering Tut: the Saga Continues","Landscape of the Soul","The Ailing Planet","The Browning Version","The Adventure","Silk Road"] },
+      { name:'English – Snapshots', subtitle:'Snapshots (Supplementary)', icon:'📗', color:'#ff6b9d', code:'kess1', chapters:['The Summer of the Beautiful White Horse','The Address',"Ranga's Marriage",'Albert Einstein at School',"Mother's Day",'The Ghat of the Only World','Birth','The Tale of Melon City'] },
+      { name:'Economics (Indian)', subtitle:'Indian Economic Development', icon:'💰', color:'#f5a623', code:'kein1', chapters:['Indian Economy on the Eve of Independence','Indian Economy 1950-1990','Liberalisation, Privatisation and Globalisation: An Appraisal','Poverty','Human Capital Formation in India','Rural Development','Employment: Growth, Informalisation and Other Issues','Infrastructure','Environment and Sustainable Development','Comparative Development Experiences of India and its Neighbours'] },
+      { name:'Economics (Statistics)', subtitle:'Statistics for Economics', icon:'📊', color:'#f5a623', code:'kest1', chapters:['Introduction','Collection of Data','Organisation of Data','Presentation of Data','Measures of Central Tendency','Measures of Dispersion','Correlation','Index Numbers','Use of Statistical Tools'] },
+      { name:'History', subtitle:'Themes in World History', icon:'📜', color:'#f5a623', code:'kehi1', chapters:['From the Beginning of Time','Early Societies','An Empire Across Three Continents','The Central Islamic Lands','Nomadic Empires','The Three Orders','Changing Cultural Traditions','Confrontation of Cultures','The Industrial Revolution','Displacing Indigenous Peoples','Paths to Modernisation'] },
+      { name:'Geography – Physical', subtitle:'Fundamentals of Physical Geography', icon:'🌍', color:'#39d0d8', code:'kegg1', chapters:['Geography as a Discipline','The Origin and Evolution of the Earth','Interior of the Earth','Distribution of Oceans and Continents','Minerals and Rocks','Geomorphic Processes','Landforms and their Evolution','Composition and Structure of Atmosphere','Solar Radiation, Heat Balance and Temperature','Atmospheric Circulation and Weather Systems','Water in the Atmosphere','World Climate and Climate Change','Water (Oceans)','Movements of Ocean Water','Life on the Earth','Biodiversity and Conservation'] },
+      { name:'Geography – India', subtitle:'India: Physical Environment', icon:'🇮🇳', color:'#39d0d8', code:'kegi1', chapters:['India – Location','Structure and Physiography','Drainage System','Climate','Natural Vegetation','Soils','Natural Hazards and Disasters'] },
+      { name:'Political Science', subtitle:'Political Theory', icon:'⚖️', color:'#bc8cff', code:'kept1', chapters:['Political Theory: An Introduction','Freedom','Equality','Social Justice','Rights','Citizenship','Nationalism','Secularism','Peace','Development'] },
+      { name:'Political Science (Indian)', subtitle:'Indian Constitution at Work', icon:'🏛️', color:'#bc8cff', code:'kepk1', chapters:['Constitution: Why and How?','Rights in the Indian Constitution','Election and Representation','Executive','Legislature','Judiciary','Federalism','Local Governments','Constitution as a Living Document','The Philosophy of the Constitution'] },
+      { name:'Hindi – Aroh', subtitle:'आरोह भाग 1', icon:'🪔', color:'#ff7b1f', code:'keha1', chapters:['नमक का दारोगा','मियाँ नसीरुद्दीन','अपू के साथ ढाई साल','विदाई-संभाषण','गलता लोहा','स्पीति में बारिश','रजनी','जामुन का पेड़','भारत माता','आत्मा का ताप','कबीर की साखियाँ','मीरा के पद','पथिक','वे आँखें','घर की याद','चंपा काले काले अच्छर नहीं चीन्हती','गाँव का घर'] },
+      { name:'Hindi – Vitan', subtitle:'वितान भाग 1', icon:'🪔', color:'#ff7b1f', code:'kehv1', chapters:['भारतीय गायिकाओं में बेजोड़: लता मंगेशकर','राजस्थान की रजत बूँदें','आलो-आँधारि'] },
+      { name:'Sanskrit', subtitle:'शाश्वती भाग 1', icon:'🕉️', color:'#f5a623', code:'kesa1', chapters:['वेदामृतम्','सर्वे भवन्तु सुखिनः','सत्त्वनिष्ठाः','दुर्भिक्षचिन्ताकुलम्','सौवर्णशकटिका','प्राणेभ्योऽपि प्रियः सुहृद्','प्रजानुरञ्जको नृपः','विद्याधनम्','त्रिपथगा','भारतस्य गौरवम्','रमणीया पृथ्वी'] }
+    ]
+  },
+  12: {
+    label: 'Class XII', stream: 'Senior Secondary (Board)',
+    subjects: [
+      { name:'Physics – I', subtitle:'Part 1', icon:'⚡', color:'#58a6ff', code:'leph1', chapters:['Electric Charges and Fields','Electrostatic Potential and Capacitance','Current Electricity','Moving Charges and Magnetism','Magnetism and Matter','Electromagnetic Induction','Alternating Current','Electromagnetic Waves'] },
+      { name:'Physics – II', subtitle:'Part 2', icon:'🌊', color:'#58a6ff', code:'leph2', chapters:['Ray Optics and Optical Instruments','Wave Optics','Dual Nature of Radiation and Matter','Atoms','Nuclei','Semiconductor Electronics: Materials, Devices and Simple Circuits'] },
+      { name:'Chemistry – I', subtitle:'Part 1', icon:'⚗️', color:'#3fb950', code:'lech1', chapters:['Solutions','Electrochemistry','Chemical Kinetics','d and f Block Elements','Coordination Compounds'] },
+      { name:'Chemistry – II', subtitle:'Part 2', icon:'🧪', color:'#3fb950', code:'lech2', chapters:['Haloalkanes and Haloarenes','Alcohols, Phenols and Ethers','Aldehydes, Ketones and Carboxylic Acids','Amines','Biomolecules','Polymers','Chemistry in Everyday Life'] },
+      { name:'Biology', subtitle:'Biology', icon:'🧬', color:'#39d0d8', code:'lebo1', chapters:['Sexual Reproduction in Flowering Plants','Human Reproduction','Reproductive Health','Principles of Inheritance and Variation','Molecular Basis of Inheritance','Evolution','Human Health and Disease','Microbes in Human Welfare','Biotechnology: Principles and Processes','Biotechnology and its Applications','Organisms and Populations','Ecosystem','Biodiversity and Conservation'] },
+      { name:'Mathematics – I', subtitle:'Part 1', icon:'🔢', color:'#bc8cff', code:'lemh1', chapters:['Relations and Functions','Inverse Trigonometric Functions','Matrices','Determinants','Continuity and Differentiability','Application of Derivatives'] },
+      { name:'Mathematics – II', subtitle:'Part 2', icon:'∫', color:'#bc8cff', code:'lemh2', chapters:['Integrals','Application of Integrals','Differential Equations','Vector Algebra','Three Dimensional Geometry','Linear Programming','Probability'] },
+      { name:'English – Flamingo', subtitle:'Flamingo', icon:'📖', color:'#ff6b9d', code:'lefl1', chapters:['The Last Lesson','Lost Spring','Deep Water','The Rattrap','Indigo','Poets and Pancakes','The Interview','Going Places'] },
+      { name:'English – Vistas', subtitle:'Vistas (Supplementary)', icon:'📗', color:'#ff6b9d', code:'levs1', chapters:['The Third Level','The Tiger King','Journey to the End of the Earth','The Enemy','Should Wizard Hit Mommy?','On the Face of It','Evans Tries an O-Level','Memories of Childhood'] },
+      { name:'Economics – Macro', subtitle:'Introductory Macroeconomics', icon:'📊', color:'#f5a623', code:'lein1', chapters:['Introduction to Macroeconomics','National Income Accounting','Money and Banking','Determination of Income and Employment','Government Budget and the Economy','Open Economy Macroeconomics'] },
+      { name:'Economics – Indian', subtitle:'Indian Economic Development', icon:'💰', color:'#f5a623', code:'leid1', chapters:['Indian Economy on the Eve of Independence','Indian Economy 1950-1990','Liberalisation, Privatisation and Globalisation','Poverty','Human Capital Formation in India','Rural Development','Employment: Growth, Informalisation and Other Issues','Infrastructure','Environment and Sustainable Development','Comparative Development Experiences of India and its Neighbours'] },
+      { name:'History – I', subtitle:'Themes in Indian History – I', icon:'📜', color:'#f5a623', code:'lehi1', chapters:['Bricks, Beads and Bones','Kings, Farmers and Towns','Kinship, Caste and Class','Thinkers, Beliefs and Buildings','Through the Eyes of Travellers'] },
+      { name:'History – II', subtitle:'Themes in Indian History – II', icon:'📜', color:'#f5a623', code:'lehi2', chapters:['Bhakti–Sufi Traditions','An Imperial Capital: Vijayanagara','Peasants, Zamindars and the State','Kings and Chronicles','Colonialism and the Countryside'] },
+      { name:'History – III', subtitle:'Themes in Indian History – III', icon:'📜', color:'#f5a623', code:'lehi3', chapters:['Rebels and the Raj','Colonial Cities','Mahatma Gandhi and the Nationalist Movement','Framing the Constitution'] },
+      { name:'Geography – Human', subtitle:'Fundamentals of Human Geography', icon:'🌍', color:'#39d0d8', code:'legg1', chapters:['Human Geography: Nature and Scope','The World Population: Distribution, Density and Growth','Population Composition','Human Development','Primary Activities','Secondary Activities','Tertiary and Quaternary Activities','Transport and Communication','International Trade','Human Settlements'] },
+      { name:'Geography – India', subtitle:'India: People and Economy', icon:'🇮🇳', color:'#39d0d8', code:'legi1', chapters:['Population: Distribution, Density, Growth and Composition','Migration: Types, Causes and Consequences','Human Development','Human Settlements','Land Resources and Agriculture','Water Resources','Mineral and Energy Resources','Manufacturing Industries','Planning and Sustainable Development in Indian Context','Transport and Communication','International Trade','Geographical Perspective on Selected Issues and Problems'] },
+      { name:'Political Science – I', subtitle:'Contemporary World Politics', icon:'🌐', color:'#bc8cff', code:'leps1', chapters:['The Cold War Era','The End of Bipolarity','US Hegemony in World Politics','Alternative Centres of Power','Contemporary South Asia','International Organisations','Security in the Contemporary World','Environment and Natural Resources','Globalisation'] },
+      { name:'Political Science – II', subtitle:'Politics in India Since Independence', icon:'🏛️', color:'#bc8cff', code:'lepi1', chapters:['Challenges of Nation Building','Era of One-Party Dominance','Politics of Planned Development',"India's External Relations",'Challenges to and Restoration of the Congress System','The Crisis of Democratic Order','Rise of Popular Movements','Regional Aspirations','Recent Developments in Indian Politics'] },
+      { name:'Business Studies – I', subtitle:'Part 1', icon:'💼', color:'#ff6b9d', code:'lebs1', chapters:['Nature and Significance of Management','Principles of Management','Business Environment','Planning','Organising','Staffing','Directing','Controlling'] },
+      { name:'Business Studies – II', subtitle:'Part 2', icon:'📈', color:'#ff6b9d', code:'lebs2', chapters:['Financial Management','Financial Markets','Marketing Management','Consumer Protection','Entrepreneurship Development'] },
+      { name:'Accountancy – I', subtitle:'Part 1 – Partnership Accounts', icon:'🧾', color:'#3fb950', code:'leac1', chapters:['Accounting for Not-for-Profit Organisation','Accounting for Partnership: Basic Concepts','Reconstitution of a Partnership Firm – Admission of a Partner','Reconstitution of a Partnership Firm – Retirement/Death of a Partner','Dissolution of Partnership Firm'] },
+      { name:'Accountancy – II', subtitle:'Part 2 – Company Accounts', icon:'📒', color:'#3fb950', code:'leac2', chapters:['Accounting for Share Capital','Issue and Redemption of Debentures','Financial Statements of a Company','Analysis of Financial Statements','Accounting Ratios','Cash Flow Statement'] },
+      { name:'Hindi – Aroh', subtitle:'आरोह भाग 2', icon:'🪔', color:'#ff7b1f', code:'leha1', chapters:['हरिवंश राय बच्चन','आनंद शर्मा','कुँवर नारायण','रघुवीर सहाय','शमशेर बहादुर सिंह','सूर्यकांत त्रिपाठी निराला','तुलसीदास','फ़िराक़ गोरखपुरी','उमाशंकर जोशी','भक्तिन','बाजार दर्शन','काले मेघा पानी दे','पहलवान की ढोलक','चार्ली चैप्लिन यानी हम सब','नमक','शिरीष के फूल','श्रम-विभाजन और जाति-प्रथा'] },
+      { name:'Hindi – Vitan', subtitle:'वितान भाग 2', icon:'🪔', color:'#ff7b1f', code:'lehv1', chapters:['सिल्वर वेडिंग','जूझ','अतीत में दबे पाँव','डायरी के पन्ने'] },
+      { name:'Sanskrit', subtitle:'शाश्वती भाग 2', icon:'🕉️', color:'#f5a623', code:'lesa1', chapters:['अनुशासनस्य महत्त्वम्','पितृभूमिवन्दना','जीवनधर्मः','विश्वशांतिः','अस्माकं समाजः','कृतज्ञता','भारतीया संस्कृतिः','ज्ञानं पुनः प्रतिष्ठापयामः'] }
+    ]
+  }
+};
+
+const NCERT_BASE = 'https://ncert.nic.in/textbook/pdf/';
+let state = { classNum: null, subjectIdx: null };
+let USER = { name: '', classNum: null };
+
+// ─── LOCALSTORAGE ───────────────────────────────
+function loadUser() {
+  try {
+    const d = localStorage.getItem('ncert_user');
+    if (d) return JSON.parse(d);
+  } catch(e) {}
+  return null;
+}
+function saveUser(name, cls) {
+  USER = { name, classNum: cls };
+  localStorage.setItem('ncert_user', JSON.stringify(USER));
+}
+
+// ─── ONBOARDING ─────────────────────────────────
+let obClass = null;
+
+function buildObClassGrid() {
+  const grid = document.getElementById('ob-class-grid');
+  grid.innerHTML = '';
+  [6,7,8,9,10,11,12].forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'ob-class-btn';
+    btn.textContent = c;
+    btn.onclick = () => {
+      obClass = c;
+      document.querySelectorAll('.ob-class-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    };
+    grid.appendChild(btn);
+  });
+}
+
+function submitOnboarding() {
+  const name = document.getElementById('ob-name').value.trim();
+  const err = document.getElementById('ob-err');
+  if (!name || !obClass) {
+    err.style.display = 'block';
+    return;
+  }
+  err.style.display = 'none';
+  saveUser(name, obClass);
+  startApp();
+}
+
+document.getElementById('ob-name').addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    const grid = document.getElementById('ob-class-grid');
+    const first = grid.querySelector('.ob-class-btn');
+    if (!obClass && first) first.click();
+    submitOnboarding();
+  }
+});
+
+// ─── APP ─────────────────────────────────────────
+function startApp() {
+  document.getElementById('onboarding').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  USER = loadUser();
+
+  document.getElementById('header-name').textContent = USER.name;
+  buildSettingsPanel();
+  initHome();
+  showView('view-home');
+}
+
+function showView(id) {
+  ['view-home','view-subjects','view-chapters'].forEach(v => {
+    document.getElementById(v).style.display = 'none';
+  });
+  document.getElementById(id).style.display = 'block';
+}
+
+function updateBreadcrumb() {
+  const bc = document.getElementById('breadcrumb');
+  let html = '';
+  if (state.classNum) {
+    html = `<span class="crumb" onclick="goHome()">home</span>`;
+    html += ` <span class="sep">/</span> <span class="crumb" onclick="goToSubjects()">class ${state.classNum}</span>`;
+    if (state.subjectIdx !== null) {
+      const sub = NCERT_DATA[state.classNum].subjects[state.subjectIdx];
+      html += ` <span class="sep">/</span> <span class="active">${sub.name.toLowerCase()}</span>`;
+    }
+  }
+  bc.innerHTML = html;
+}
+
+// ─── HOME ────────────────────────────────────────
+function initHome() {
+  const greetings = ['hey', 'yo', 'what\'s up', 'hi'];
+  const g = greetings[Math.floor(Math.random() * greetings.length)];
+  document.getElementById('home-greeting').textContent = `${g}, ${USER.name}.`;
+
+  const link = document.getElementById('home-class-link');
+  link.textContent = `class ${USER.classNum}`;
+  link.onclick = () => goToClass(USER.classNum);
+
+  const grid = document.getElementById('class-grid');
+  grid.innerHTML = '';
+  Object.keys(NCERT_DATA).forEach(cls => {
+    const c = parseInt(cls);
+    const card = document.createElement('div');
+    card.className = 'class-card' + (c === USER.classNum ? ' mine' : '');
+    card.innerHTML = `<div class="class-num">${c}</div><div class="class-label">class ${toRoman(c)}</div>`;
+    card.onclick = () => goToClass(c);
+    grid.appendChild(card);
+  });
+}
+
+function toRoman(n) {
+  return {6:'VI',7:'VII',8:'VIII',9:'IX',10:'X',11:'XI',12:'XII'}[n]||n;
+}
+
+function goHome() {
+  state = { classNum: null, subjectIdx: null };
+  updateBreadcrumb();
+  initHome();
+  showView('view-home');
+  window.scrollTo(0,0);
+}
+
+// ─── SUBJECTS ────────────────────────────────────
+function goToClass(c) {
+  state.classNum = c;
+  state.subjectIdx = null;
+  updateBreadcrumb();
+  renderSubjects();
+  showView('view-subjects');
+  window.scrollTo(0,0);
+}
+
+function goToSubjects() {
+  state.subjectIdx = null;
+  updateBreadcrumb();
+  renderSubjects();
+  showView('view-subjects');
+  window.scrollTo(0,0);
+}
+
+function renderSubjects() {
+  const cls = NCERT_DATA[state.classNum];
+  document.getElementById('subjects-title').textContent = `class ${state.classNum} — ${cls.stream.toLowerCase()}`;
+  document.getElementById('subjects-meta').textContent = `${cls.subjects.length} subjects`;
+
+  const grid = document.getElementById('subject-grid');
+  grid.innerHTML = '';
+  grid.className = 'subject-grid stagger';
+  void grid.offsetWidth;
+
+  cls.subjects.forEach((sub, idx) => {
+    const card = document.createElement('div');
+    card.className = 'subject-card';
+    card.style.setProperty('--sub-color', sub.color);
+    card.innerHTML = `
+      <div class="subject-icon">${sub.icon}</div>
+      <div class="subject-name">${sub.name}</div>
+      <div class="subject-meta">${sub.subtitle} · ${sub.chapters.length} ch</div>
+    `;
+    card.onclick = () => goToSubject(idx);
+    grid.appendChild(card);
+  });
+
+  const si = document.getElementById('subject-search');
+  si.value = '';
+  si.oninput = function() { filterSubjects(this.value); };
+}
+
+function filterSubjects(q) {
+  const cards = document.querySelectorAll('#subject-grid .subject-card');
+  const query = q.toLowerCase();
+  cards.forEach((card, i) => {
+    const sub = NCERT_DATA[state.classNum].subjects[i];
+    const m = sub.name.toLowerCase().includes(query) || sub.subtitle.toLowerCase().includes(query);
+    card.style.display = m ? '' : 'none';
+  });
+}
+
+document.getElementById('back-from-subjects').onclick = goHome;
+
+// ─── CHAPTERS ────────────────────────────────────
+function goToSubject(idx) {
+  state.subjectIdx = idx;
+  updateBreadcrumb();
+  renderChapters();
+  showView('view-chapters');
+  window.scrollTo(0,0);
+}
+
+function renderChapters() {
+  const cls = NCERT_DATA[state.classNum];
+  const sub = cls.subjects[state.subjectIdx];
+
+  document.getElementById('chapters-badge').textContent = `class ${state.classNum} · ${sub.subtitle}`;
+  document.getElementById('chapters-title').textContent = `${sub.icon} ${sub.name.toLowerCase()}`;
+  document.getElementById('chapters-meta').textContent = `${sub.chapters.length} chapters · ncert.nic.in`;
+
+  const fullCode = sub.fullCode || (sub.code + 'ps');
+  document.getElementById('btn-full-book').onclick = () => window.open(NCERT_BASE + fullCode + '.pdf', '_blank');
+
+  const grid = document.getElementById('chapter-grid');
+  grid.innerHTML = '';
+  grid.className = 'chapter-list stagger';
+  void grid.offsetWidth;
+
+  sub.chapters.forEach((ch, i) => {
+    const chNum = String(i + 1).padStart(2, '0');
+    const pdfUrl = NCERT_BASE + sub.code + chNum + '.pdf';
+    const row = document.createElement('div');
+    row.className = 'chapter-row';
+    row.style.setProperty('--sub-color', sub.color);
+    row.innerHTML = `
+      <div class="ch-num">${i+1}.</div>
+      <div class="ch-name">${ch}</div>
+      <div class="ch-actions">
+        <button class="btn-pdf">open</button>
+        <button class="btn-dl">↓</button>
+      </div>
+    `;
+    row.querySelector('.btn-pdf').onclick = () => window.open(pdfUrl, '_blank');
+    row.querySelector('.btn-dl').onclick = () => {
+      const a = document.createElement('a');
+      a.href = pdfUrl; a.download = `Class${state.classNum}_${sub.name}_Ch${chNum}.pdf`;
+      a.target = '_blank'; a.click();
+    };
+    grid.appendChild(row);
+  });
+
+  const ci = document.getElementById('chapter-search');
+  ci.value = '';
+  ci.oninput = function() { filterChapters(this.value); };
+}
+
+function filterChapters(q) {
+  const rows = document.querySelectorAll('#chapter-grid .chapter-row');
+  const sub = NCERT_DATA[state.classNum].subjects[state.subjectIdx];
+  const query = q.toLowerCase();
+  rows.forEach((row, i) => {
+    const m = sub.chapters[i].toLowerCase().includes(query) || String(i+1).includes(query);
+    row.style.display = m ? '' : 'none';
+  });
+}
+
+document.getElementById('back-from-chapters').onclick = goToSubjects;
+
+// ─── SETTINGS ────────────────────────────────────
+let sTmpClass = null;
+
+function buildSettingsPanel() {
+  const row = document.getElementById('s-class-row');
+  row.innerHTML = '';
+  sTmpClass = USER.classNum;
+  [6,7,8,9,10,11,12].forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'settings-cls-btn' + (c === USER.classNum ? ' selected' : '');
+    btn.textContent = c;
+    btn.onclick = () => {
+      sTmpClass = c;
+      document.querySelectorAll('.settings-cls-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    };
+    row.appendChild(btn);
+  });
+  document.getElementById('s-name').value = USER.name;
+}
+
+function toggleSettings() {
+  const panel = document.getElementById('settings-panel');
+  panel.classList.toggle('open');
+  if (panel.classList.contains('open')) buildSettingsPanel();
+}
+
+function saveSettings() {
+  const name = document.getElementById('s-name').value.trim() || USER.name;
+  saveUser(name, sTmpClass || USER.classNum);
+  document.getElementById('header-name').textContent = USER.name;
+  document.getElementById('settings-panel').classList.remove('open');
+  initHome();
+}
+
+document.addEventListener('click', e => {
+  const panel = document.getElementById('settings-panel');
+  const btn = document.getElementById('settings-toggle');
+  if (panel.classList.contains('open') && !panel.contains(e.target) && !btn.contains(e.target)) {
+    panel.classList.remove('open');
+  }
+});
+
+// ─── INIT ─────────────────────────────────────────
+buildObClassGrid();
+const saved = loadUser();
+if (saved && saved.name && saved.classNum) {
+  USER = saved;
+  startApp();
+}
+</script>
+</body>
+</html>
