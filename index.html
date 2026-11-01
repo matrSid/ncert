@@ -670,10 +670,12 @@ const NCERT_DATA = {
         chapters:['What is Democracy? Why Democracy?','Constitutional Design','Electoral Politics','Working of Institutions','Democratic Rights'] },
       { name:'Economics',              subtitle:'Economics',               icon:'💰', color:'#3fb950', code:'iess2',
         chapters:['The Story of Village Palampur','People as Resource','Poverty as a Challenge','Food Security in India'] },
+      // Rationalised: "Packing" and "The Bond of Love" removed → 9 chapters (verify last chapter opens)
       { name:'English – Beehive',      subtitle:'Beehive',                 icon:'📖', color:'#ff6b9d', code:'iebe1',
-        chapters:['The Fun They Had','The Sound of Music','The Little Girl','A Truly Beautiful Mind','The Snake and the Mirror','My Childhood','Packing','Reach for the Top','The Bond of Love','Kathmandu','If I Were You'] },
+        chapters:['The Fun They Had','The Sound of Music','The Little Girl','A Truly Beautiful Mind','The Snake and the Mirror','My Childhood','Reach for the Top','Kathmandu','If I Were You'] },
+      // Rationalised: "Weathering the Storm in Ersama" and "The Accidental Tourist" removed → 8 chapters (verify last chapter opens)
       { name:'English – Moments',      subtitle:'Moments (Supplementary)', icon:'📗', color:'#ff6b9d', code:'iemo1',
-        chapters:['The Lost Child','The Adventures of Toto','Iswaran the Storyteller','In the Kingdom of Fools','The Happy Prince','Weathering the Storm in Ersama','The Last Leaf','A House is Not a Home','The Accidental Tourist','The Beggar'] },
+        chapters:['The Lost Child','The Adventures of Toto','Iswaran the Storyteller','In the Kingdom of Fools','The Happy Prince','The Last Leaf','A House is Not a Home','The Beggar'] },
       { name:'Hindi A – Kshitij',      subtitle:'क्षितिज भाग 1',          icon:'🪔', color:'#ff7b1f', code:'ihks1',
         chapters:['दो बैलों की कथा','ल्हासा की ओर','उपभोक्तावाद की संस्कृति','साँवले सपनों की याद','नाना साहब की पुत्री देवी मैना को भस्म कर दिया गया','प्रेमचंद के फटे जूते','मेरे बचपन के दिन','एक कुत्ता और एक मैना','कबीर की साखियाँ','ललद्यद','रसखान के सवैये','माखनलाल चतुर्वेदी','सुमित्रानंदन पंत','केदारनाथ अग्रवाल','सर्वेश्वर दयाल सक्सेना','चंद्रकांत देवताले','राजेश जोशी'] },
       { name:'Hindi B – Sparsh',       subtitle:'स्पर्श भाग 1',           icon:'🪔', color:'#ff7b1f', code:'ihsp1',
@@ -697,16 +699,20 @@ const NCERT_DATA = {
         chapters:['Power Sharing','Federalism','Gender, Religion and Caste','Political Parties','Outcomes of Democracy'] },
       { name:'Economics',              subtitle:'Understanding Economic Development', icon:'💰', color:'#3fb950', code:'jess2',
         chapters:['Development','Sectors of the Indian Economy','Money and Credit','Globalisation and the Indian Economy','Consumer Rights'] },
+      // Rationalised: "The Hundred Dresses – I & II" removed → 9 chapters
       { name:'English – First Flight',  subtitle:'First Flight',           icon:'📖', color:'#ff6b9d', code:'jeff1',
-        chapters:['A Letter to God','Nelson Mandela: Long Walk to Freedom','Two Stories about Flying','From the Diary of Anne Frank','The Hundred Dresses – I','The Hundred Dresses – II','Glimpses of India','Mijbil the Otter','Madam Rides the Bus','The Sermon at Benares','The Proposal'] },
+        chapters:['A Letter to God','Nelson Mandela: Long Walk to Freedom','Two Stories about Flying','From the Diary of Anne Frank','Glimpses of India','Mijbil the Otter','Madam Rides the Bus','The Sermon at Benares','The Proposal'] },
+      // Rationalised: "The Hack Driver" removed → 9 chapters
       { name:'English – Footprints',   subtitle:'Footprints Without Feet (Suppl.)', icon:'📗', color:'#ff6b9d', code:'jefp1',
-        chapters:["A Triumph of Surgery","The Thief's Story","The Midnight Visitor","A Question of Trust","Footprints without Feet","The Making of a Scientist","The Necklace","The Hack Driver","Bholi","The Book That Saved the Earth"] },
+        chapters:["A Triumph of Surgery","The Thief's Story","The Midnight Visitor","A Question of Trust","Footprints without Feet","The Making of a Scientist","The Necklace","Bholi","The Book That Saved the Earth"] },
       { name:'Hindi A – Kshitij',      subtitle:'क्षितिज भाग 2',          icon:'🪔', color:'#ff7b1f', code:'jhks1',
         chapters:['सूरदास','तुलसीदास','देव','जयशंकर प्रसाद','सूर्यकांत त्रिपाठी निराला','नागार्जुन','गिरिजाकुमार माथुर','ऋतुराज','मंगलेश डबराल','स्वयं प्रकाश','रामवृक्ष बेनीपुरी','यशपाल','सर्वेश्वर दयाल सक्सेना','मन्नू भंडारी','महावीर प्रसाद द्विवेदी','यतींद्र मिश्र','भदंत आनंद कौसल्यायन'] },
       { name:'Hindi A – Kritika',      subtitle:'कृतिका भाग 2',           icon:'🪔', color:'#ff7b1f', code:'jhkr1',
         chapters:['माता का आँचल','जॉर्ज पंचम की नाक','साना-साना हाथ जोड़ि','एही ठैयाँ झुलनी हेरानी हो रामा!','मैं क्यों लिखता हूँ?'] },
       { name:'Hindi B – Sparsh',       subtitle:'स्पर्श भाग 2',           icon:'🪔', color:'#ff7b1f', code:'jhsp1',
         chapters:['बड़े भाई साहब','डायरी का एक पन्ना','तताँरा-वामीरो कथा','तीसरी कसम के शिल्पकार शैलेंद्र','गिरगिट','अब कहाँ दूसरे के दुख से दुखी होने वाले','पतझर में टूटी पत्तियाँ','कारतूस','मीरा के पद','बिहारी के दोहे','महादेवी वर्मा','कबीर की साखियाँ','मनुष्यता','पर्वत प्रदेश में पावस','मधुर मधुर मेरे दीपक जल','तोप','कर चले हम फ़िदा','आत्मत्राण'] },
+      { name:'Hindi B – Sanchayan',    subtitle:'संचयन भाग 2',            icon:'🪔', color:'#ff7b1f', code:'jhsy1',
+        chapters:['हरिहर काका','सपनों के-से दिन','टोपी शुक्ला'] },
       { name:'Sanskrit',               subtitle:'शेमुषी भाग 2',           icon:'🕉️', color:'#f5a623', code:'jhsk1',
         chapters:['शुचिपर्यावरणम्','बुद्धिर्बलवती सदा','व्यायामः सर्वदा पथ्यः','शिशुलालनम्','जननी तुल्यवत्सला','सुभाषितानि','सौहार्दं प्रकृतेः शोभा','विचित्रः साक्षी','सूक्तयः','भूकम्पविभीषिका','प्राणेभ्योऽपि प्रियः सुह्रद्','अनयोः प्रश्नोत्तराणि'] }
     ]
